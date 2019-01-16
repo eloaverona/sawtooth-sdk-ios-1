@@ -67,11 +67,19 @@ class XOApi {
         do {
             try postUrlRequest.httpBody = batchList.serializedData()
         } catch {
-            os_log("Unable to serialize batch data")
+            if #available(iOS 10.0, *) {
+                os_log("Unable to serialize batch data")
+            } else {
+                // Fallback on earlier versions
+            }
         }
         URLSession.shared.dataTask(with: postUrlRequest) { (data, response, error) in
             if error != nil {
-                os_log("%@", error!.localizedDescription)
+                if #available(iOS 10.0, *) {
+                    os_log("%@", error!.localizedDescription)
+                } else {
+                    // Fallback on earlier versions
+                }
             }
             guard data != nil else {
                 return
@@ -97,7 +105,11 @@ class XOApi {
         let batchStatuses = URL(string: url + "/batch_statuses?id=\(batchID)&wait=\(wait)")!
         URLSession.shared.dataTask(with: batchStatuses) {(data, response, error) in
             if error != nil {
-                os_log("%@", error!.localizedDescription)
+                if #available(iOS 10.0, *) {
+                    os_log("%@", error!.localizedDescription)
+                } else {
+                    // Fallback on earlier versions
+                }
             }
             guard let data = data else {
                 return
@@ -107,11 +119,19 @@ class XOApi {
                     do {
                         let jsonResponse = try JSONSerialization.jsonObject(with: data, options: [])
                         guard let batchStatusResponse = jsonResponse as? [String: Any] else {
-                            os_log("Failed to deserialize batch status response")
+                            if #available(iOS 10.0, *) {
+                                os_log("Failed to deserialize batch status response")
+                            } else {
+                                // Fallback on earlier versions
+                            }
                             return
                         }
                         guard let dataArray = batchStatusResponse["data"] as? [[String: Any]] else {
-                            os_log("Failed to fetch batch status data")
+                            if #available(iOS 10.0, *) {
+                                os_log("Failed to fetch batch status data")
+                            } else {
+                                // Fallback on earlier versions
+                            }
                             return
                         }
                         let batchStatus = dataArray.compactMap(BatchStatus.init)[0]
@@ -119,11 +139,19 @@ class XOApi {
                             completion(self.handleBatchStatus(batchStatus: batchStatus))
                         }
                     } catch let parsingError {
-                        os_log("Error  %@", parsingError.localizedDescription)
+                        if #available(iOS 10.0, *) {
+                            os_log("Error  %@", parsingError.localizedDescription)
+                        } else {
+                            // Fallback on earlier versions
+                        }
                     }
                 }
             } else {
-                os_log("Error parsing batch status response")
+                if #available(iOS 10.0, *) {
+                    os_log("Error parsing batch status response")
+                } else {
+                    // Fallback on earlier versions
+                }
                 return
             }
         }.resume()
@@ -133,20 +161,44 @@ class XOApi {
         switch batchStatus.status {
         case BatchStatusEnum.invalid:
             let invalidTransaction = batchStatus.invalidTransactions[0]
-            os_log("%@", invalidTransaction.message)
-            os_log("Invalid Transaction ID: %@", invalidTransaction.id)
+            if #available(iOS 10.0, *) {
+                os_log("%@", invalidTransaction.message)
+            } else {
+                // Fallback on earlier versions
+            }
+            if #available(iOS 10.0, *) {
+                os_log("Invalid Transaction ID: %@", invalidTransaction.id)
+            } else {
+                // Fallback on earlier versions
+            }
             return invalidTransaction.message
         case BatchStatusEnum.committed:
-            os_log("Batch Successfully Committed!")
+            if #available(iOS 10.0, *) {
+                os_log("Batch Successfully Committed!")
+            } else {
+                // Fallback on earlier versions
+            }
             return "Batch Successfully Committed!"
         case BatchStatusEnum.pending:
-            os_log("Batch Pending")
+            if #available(iOS 10.0, *) {
+                os_log("Batch Pending")
+            } else {
+                // Fallback on earlier versions
+            }
             return "Batch Pending"
         case BatchStatusEnum.unknown:
-            os_log("Batch Status Unknown")
+            if #available(iOS 10.0, *) {
+                os_log("Batch Status Unknown")
+            } else {
+                // Fallback on earlier versions
+            }
             return "Batch Status Unknown"
         case BatchStatusEnum.unhandled:
-            os_log("Unhandled status")
+            if #available(iOS 10.0, *) {
+                os_log("Unhandled status")
+            } else {
+                // Fallback on earlier versions
+            }
             return "Unhandled Status"
         }
     }
@@ -155,7 +207,11 @@ class XOApi {
         let stateResponse = URL(string: url + "/state?address=\(address)")!
         URLSession.shared.dataTask(with: stateResponse) {(data, response, error) in
             if error != nil {
-                os_log("%@", error!.localizedDescription)
+                if #available(iOS 10.0, *) {
+                    os_log("%@", error!.localizedDescription)
+                } else {
+                    // Fallback on earlier versions
+                }
             }
             guard let data = data else {
                  DispatchQueue.main.async {
@@ -171,18 +227,30 @@ class XOApi {
                             completion(self.parseState(response: jsonResponse))
                         }
                     } catch let parsingError {
-                        os_log("Error %@", parsingError.localizedDescription)
+                        if #available(iOS 10.0, *) {
+                            os_log("Error %@", parsingError.localizedDescription)
+                        } else {
+                            // Fallback on earlier versions
+                        }
                     }
                 }
             } else {
-                os_log("Error parsing batch status response")
+                if #available(iOS 10.0, *) {
+                    os_log("Error parsing batch status response")
+                } else {
+                    // Fallback on earlier versions
+                }
             }
             }.resume()
     }
 
     private func parseState(response: Any) -> [String: Any] {
         guard let response = response as? [String: Any] else {
-            os_log("Unable to deserialize state data")
+            if #available(iOS 10.0, *) {
+                os_log("Unable to deserialize state data")
+            } else {
+                // Fallback on earlier versions
+            }
             return [:]
         }
         return response

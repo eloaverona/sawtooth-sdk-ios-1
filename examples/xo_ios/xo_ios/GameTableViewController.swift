@@ -67,7 +67,11 @@ class GameTableViewController: UITableViewController {
             gameBoardView.XOGameHandler = self.gameHandler
             gameBoardView.game = selectedGame
         case _:
-            os_log("Unknown segue")
+            if #available(iOS 10.0, *) {
+                os_log("Unknown segue")
+            } else {
+                // Fallback on earlier versions
+            }
         }
     }
 

@@ -49,7 +49,11 @@ class XORequestHandler {
                 let pubKey = try context.getPublicKey(privateKey: privateKey)
                 UserDefaults.standard.set(pubKey.hex(), forKey: "publicKey" )
             } catch {
-                os_log("Error creating public key")
+                if #available(iOS 10.0, *) {
+                    os_log("Error creating public key")
+                } else {
+                    // Fallback on earlier versions
+                }
             }
             return privateKey
         }
@@ -102,7 +106,11 @@ class XORequestHandler {
             transactionHeader.signerPublicKey = try signer.getPublicKey().hex()
             transactionHeader.batcherPublicKey = try signer.getPublicKey().hex()
         } catch {
-            os_log("Failed to get signer public key")
+            if #available(iOS 10.0, *) {
+                os_log("Failed to get signer public key")
+            } else {
+                // Fallback on earlier versions
+            }
         }
         transactionHeader.familyName = "xo"
         transactionHeader.familyVersion = "1.0"
@@ -120,10 +128,18 @@ class XORequestHandler {
                 let signature = try signer.sign(data: signatureData)
                 transaction.headerSignature = signature
             } catch {
-                os_log("Unexpected error signing batch ")
+                if #available(iOS 10.0, *) {
+                    os_log("Unexpected error signing batch ")
+                } else {
+                    // Fallback on earlier versions
+                }
             }
         } catch {
-            os_log("Unable to serialize data")
+            if #available(iOS 10.0, *) {
+                os_log("Unable to serialize data")
+            } else {
+                // Fallback on earlier versions
+            }
         }
         transaction.payload = payloadData!
         return transaction
@@ -134,7 +150,11 @@ class XORequestHandler {
         do {
             batchHeader.signerPublicKey = try signer.getPublicKey().hex()
         } catch {
-            os_log("Failed to get signer public key")
+            if #available(iOS 10.0, *) {
+                os_log("Failed to get signer public key")
+            } else {
+                // Fallback on earlier versions
+            }
         }
 
         batchHeader.transactionIds = transactions.map({ $0.headerSignature })
@@ -148,10 +168,18 @@ class XORequestHandler {
                 let signature = try signer.sign(data: signatureData)
                 batch.headerSignature = signature
             } catch {
-                os_log("Unexpected error signing batch")
+                if #available(iOS 10.0, *) {
+                    os_log("Unexpected error signing batch")
+                } else {
+                    // Fallback on earlier versions
+                }
             }
         } catch {
-            os_log("Unable to serialize data")
+            if #available(iOS 10.0, *) {
+                os_log("Unable to serialize data")
+            } else {
+                // Fallback on earlier versions
+            }
         }
         batch.transactions = transactions
         var batchList = BatchList()

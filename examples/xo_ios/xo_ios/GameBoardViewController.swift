@@ -35,12 +35,20 @@ class GameBoardViewController: UIViewController {
     }
 
     @IBAction func gameBoardRefresh(_ sender: UIBarButtonItem) {
-        os_log("Refresh Button")
+        if #available(iOS 10.0, *) {
+            os_log("Refresh Button")
+        } else {
+            // Fallback on earlier versions
+        }
         updateBoard()
     }
 
     @IBAction func gameBoardInfo(_ sender: UIButton) {
-        os_log("Info Button")
+        if #available(iOS 10.0, *) {
+            os_log("Info Button")
+        } else {
+            // Fallback on earlier versions
+        }
         let playersString = "Player 1: \(game?.playerKey1 ?? "")\nPlayer 2: \(game?.playerKey2 ?? "")"
         let alert = UIAlertController(title: "Players",
                                       message: playersString,
@@ -49,7 +57,11 @@ class GameBoardViewController: UIViewController {
                                                                comment: "Default action"),
                                       style: .default,
                                       handler: { _ in
-                                        os_log("The \"OK\" alert occurred.")
+                                        if #available(iOS 10.0, *) {
+                                            os_log("The \"OK\" alert occurred.")
+                                        } else {
+                                            // Fallback on earlier versions
+                                        }
         }))
         self.present(alert, animated: true, completion: nil)
     }
@@ -67,7 +79,11 @@ class GameBoardViewController: UIViewController {
                                                                    comment: "Default action"),
                                           style: .default,
                                           handler: {_ in
-                                            os_log("The \"OK\" alert occurred.")
+                                            if #available(iOS 10.0, *) {
+                                                os_log("The \"OK\" alert occurred.")
+                                            } else {
+                                                // Fallback on earlier versions
+                                            }
                                             self.updateBoard()
             }))
             self.present(alert, animated: true, completion: nil)

@@ -1,2 +1,3 @@
+git "file:///Users/eloafran/Desktop/sawtooth-sdk-ios" "a49e287b75dba223e81e2731d6c8bf420c16f0a8"
 github "Boilertalk/secp256k1.swift" "0.1.4"
-github "apple/swift-protobuf" "1.2.0"
+github "apple/swift-protobuf" "1.3.1"
