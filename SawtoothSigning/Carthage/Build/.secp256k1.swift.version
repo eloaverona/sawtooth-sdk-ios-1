@@ -1,0 +1,18 @@
+{
+  "Mac" : [
+
+  ],
+  "watchOS" : [
+
+  ],
+  "tvOS" : [
+
+  ],
+  "commitish" : "0.1.4",
+  "iOS" : [
+    {
+      "name" : "secp256k1",
+      "hash" : "ecc082dceabf6dd680d32d40d5ce592a5505eb3ee0c6807a7d419d7f46066134"
+    }
+  ]
+}
